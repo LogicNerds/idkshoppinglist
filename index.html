@@ -664,33 +664,39 @@
             display: none;
         }
 
-        /* Ad Container */
+        /* Ad Container - Floating Bottom Banner */
         .ad-container {
-            margin: 25px 0;
-            padding: 15px;
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 10px;
             background: #F3F4F6;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #E5E7EB;
+            border-top: 1px solid #D1D5DB;
+            z-index: 998;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
 
         .ad-label {
-            font-size: 0.7em;
+            font-size: 0.65em;
             color: #9CA3AF;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            text-align: center;
         }
 
         .ad-space {
-            min-height: 90px;
+            min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: white;
             border-radius: 4px;
             color: #D1D5DB;
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
 
         /* Footer */
@@ -880,13 +886,6 @@
                 </div>
             </div>
 
-            <!-- Ad Space 1 -->
-            <div class="ad-container">
-                <div class="ad-label">Advertisement</div>
-                <div class="ad-space" id="adSpace1">
-                    Ad Space
-                </div>
-            </div>
 
             <!-- Shopping Lists -->
             <div class="lists-section">
@@ -938,13 +937,6 @@
 
             <button class="add-item-btn" onclick="showAddItemModal()">+ Add Item</button>
 
-            <!-- Ad Space 2 -->
-            <div class="ad-container">
-                <div class="ad-label">Advertisement</div>
-                <div class="ad-space" id="adSpace2">
-                    Ad Space
-                </div>
-            </div>
 
             <div class="action-buttons-shopping">
                 <button class="keep-list-btn" onclick="keepList()" id="keepListBtn">
@@ -953,6 +945,14 @@
                 <button class="done-shopping-btn" onclick="completeShopping()" id="doneBtn">
                     ✓ Done Shopping!
                 </button>
+            </div>
+        </div>
+
+        <!-- Floating Ad Banner -->
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <div class="ad-space" id="adBanner">
+                Ad Space
             </div>
         </div>
     </div>
@@ -997,6 +997,7 @@
             <p>By using this application, you acknowledge and accept full responsibility for your budgeting decisions and data accuracy.</p>
         </div>
     </div>
+
 
     <!-- Footer -->
     <div class="footer">
