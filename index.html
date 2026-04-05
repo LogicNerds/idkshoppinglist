@@ -947,14 +947,6 @@
                 </button>
             </div>
         </div>
-
-        <!-- Floating Ad Banner -->
-        <div class="ad-container">
-            <div class="ad-label">Advertisement</div>
-            <div class="ad-space" id="adBanner">
-                Ad Space
-            </div>
-        </div>
     </div>
 
 
@@ -998,6 +990,14 @@
         </div>
     </div>
 
+
+    <!-- Floating Ad Banner -->
+    <div class="ad-container hidden" id="adBanner">
+        <div class="ad-label">Advertisement</div>
+        <div class="ad-space">
+            Ad Space
+        </div>
+    </div>
 
     <!-- Footer -->
     <div class="footer">
@@ -1096,12 +1096,14 @@
             document.getElementById('loginScreen').classList.remove('hidden');
             document.getElementById('mainApp').classList.add('hidden');
             document.getElementById('shoppingView').classList.add('hidden');
+            document.getElementById('adBanner').classList.add('hidden');
         }
 
         function showMainApp() {
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
             document.getElementById('shoppingView').classList.add('hidden');
+            document.getElementById('adBanner').classList.remove('hidden');
             
             if (currentUser.photoURL) {
                 document.getElementById('userAvatar').src = currentUser.photoURL;
@@ -1112,6 +1114,7 @@
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.add('hidden');
             document.getElementById('shoppingView').classList.remove('hidden');
+            document.getElementById('adBanner').classList.remove('hidden');
         }
 
         // Load shopping lists
