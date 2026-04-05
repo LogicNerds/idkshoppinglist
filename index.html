@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDK - Shopping List</title>
+    <style>
+        :root {
+            --primary: #475569;
+            --primary-dark: #334155;
+            --accent: #14B8A6;
+            --accent-dark: #0D9488;
+            --bg-main: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --border: #D1D5DB;
+            --success: #059669;
+            --warning: #FB923C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-main);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg-card);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Login Screen */
+        .login-screen {
+            padding: 40px 20px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--primary);
+        }
+
+        .login-screen h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .login-screen .by-idk {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .login-screen .tagline {
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+            font-style: italic;
+            line-height: 1.4;
+            max-width: 350px;
+            font-weight: 400;
+        }
+
+        .google-signin-btn {
+            background: white;
+            color: #333;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: all 0.2s;
+            margin: 0 auto;
+        }
+
+        .google-signin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .google-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px 20px 80px 20px;
+        }
+
+        /* Financial Overview Card */
+        .total-balance {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: 16px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+        }
+
+        .total-balance h2 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .balance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .balance-item h3 {
+            font-size: 0.75em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+            font-weight: 400;
+        }
+
+        .balance-item .amount {
+            font-size: 1.4em;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .amount.positive {
+            color: rgba(255,255,255,0.95);
+        }
+
+        .amount.negative {
+            color: #fef08a;
+        }
+
+        /* Shopping Lists Section */
+        .lists-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .list-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .list-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 3px 10px rgba(13, 148, 136, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .list-info h4 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .list-date {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .delete-list-btn {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px;
+            opacity: 0.6;
+            transition: all 0.2s;
+            color: #dc2626;
+        }
+
+        .delete-list-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .list-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 3px;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .stat-value.over-budget {
+            color: #dc2626;
+        }
+
+        .create-list-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            border: 2px dashed var(--accent);
+            color: var(--accent);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .create-list-btn:hover {
+            background: #E0F2F1;
+        }
+
+        .no-lists {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-style: italic;
+        }
+
+        /* Shopping List View */
+        .shopping-view {
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .shopping-header {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Make price field wider for easier one-handed use */
+        .form-group.price-field input {
+            font-size: 1.5em;
+            padding: 18px 12px 18px 38px;
+        }
+
+        .form-group.price-field .price-input-container::before {
+            font-size: 1.5em;
+            left: 18px;
+        }
+
+        .budget-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #E0F2F1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .budget-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .budget-amounts {
+            text-align: right;
+        }
+
+        .budget-value {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .total-value {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .over-budget-warning {
+            margin-left: 5px;
+        }
+
+        /* Shopping Items */
+        .items-container {
+            margin-bottom: 20px;
+        }
+
+        .shopping-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .shopping-item:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.1);
+        }
+
+        .shopping-item.dragging {
+            opacity: 0.5;
+            border-color: var(--accent);
+        }
+
+        .shopping-item.checked {
+            opacity: 0.6;
+            background: #f9fafb;
+        }
+
+        .shopping-item.checked .item-details .item-name-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .drag-handle {
+            font-size: 1.2em;
+            color: #999;
+            cursor: grab;
+            padding: 5px;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .item-checkbox {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-name-text {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+            font-size: 1em;
+        }
+
+        .item-info {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .item-total {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+
+        .delete-item-btn {
+            background: none;
+            border: none;
+            color: #dc2626;
+            font-size: 1.3em;
+            cursor: pointer;
+            padding: 5px;
+            opacity: 0.6;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .delete-item-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .add-item-btn {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            border: 2px dashed var(--accent);
+            color: var(--accent);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .add-item-btn:hover {
+            background: #E0F2F1;
+        }
+
+        /* Keep List & Done Shopping Buttons */
+        .action-buttons-shopping {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .keep-list-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .keep-list-btn:hover {
+            background: #E0F2F1;
+        }
+
+        .keep-list-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Done Shopping Button */
+        .done-shopping-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .done-shopping-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 148, 136, 0.4);
+        }
+
+        .done-shopping-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Price input container for modal */
+        .price-input-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .price-input-container::before {
+            content: '$';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 1em;
+            pointer-events: none;
+        }
+
+        .price-input-container input {
+            padding-left: 28px !important;
+            width: 100%;
+        }
+
+        /* Theme Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn.secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Ad Container */
+        .ad-container {
+            margin: 25px 0;
+            padding: 15px;
+            background: #F3F4F6;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #E5E7EB;
+        }
+
+        .ad-label {
+            font-size: 0.7em;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .ad-space {
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 4px;
+            color: #D1D5DB;
+            font-size: 0.9em;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.85em;
+            z-index: 999;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .footer a {
+            color: #a8edea;
+            text-decoration: none;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Disclaimer Drawer */
+        .disclaimer-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            z-index: 1001;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+        }
+
+        .disclaimer-drawer.open {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .disclaimer-content {
+            padding: 30px 20px 80px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .disclaimer-content h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .disclaimer-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .disclaimer-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            cursor: pointer;
+            color: #999;
+            padding: 5px 10px;
+        }
+
+        .disclaimer-close:hover {
+            color: #333;
+        }
+
+        .disclaimer-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .disclaimer-overlay.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .balance-item .amount {
+                font-size: 1.2em;
+            }
+
+            .shopping-item {
+                gap: 6px;
+                padding: 10px;
+            }
+
+            .item-name {
+                font-size: 0.9em;
+            }
+
+            .item-qty {
+                width: 45px;
+                font-size: 0.9em;
+            }
+
+            .shopping-item .price-input-container {
+                width: 70px;
+            }
+
+            .item-price {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <h1>My Shopping List</h1>
+        <p class="by-idk">by IDK 💸</p>
+        <p class="tagline">If you knew better, you'd do better</p>
+        <button class="google-signin-btn" onclick="signInWithGoogle()">
+            <svg class="google-icon" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Sign in with Google
+        </button>
+    </div>
+
+    <!-- Main App - Dashboard -->
+    <div id="mainApp" class="container hidden">
+        <div class="header">
+            <div class="header-left">
+                <span style="font-size: 1.2em; font-weight: 600;">Shopping List</span>
+            </div>
+            <div class="header-right">
+                <img id="userAvatar" class="user-avatar" src="" alt="User">
+                <button class="logout-btn" onclick="signOut()">Logout</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Financial Overview -->
+            <div class="total-balance">
+                <h2>Spending Overview</h2>
+                <div class="balance-grid">
+                    <div class="balance-item">
+                        <h3>Last Trip Spend</h3>
+                        <div class="amount" id="lastTripSpend">$0.00</div>
+                    </div>
+                    <div class="balance-item">
+                        <h3>MTD Spend</h3>
+                        <div class="amount" id="mtdSpend">$0.00</div>
+                    </div>
+                    <div class="balance-item">
+                        <h3>Avg Spend</h3>
+                        <div class="amount" id="avgSpend">$0.00</div>
+                    </div>
+                    <div class="balance-item">
+                        <h3>Last Trip Delta</h3>
+                        <div class="amount" id="lastTripDelta">$0.00</div>
+                    </div>
+                    <div class="balance-item">
+                        <h3>MTD Delta</h3>
+                        <div class="amount" id="mtdDelta">$0.00</div>
+                    </div>
+                    <div class="balance-item">
+                        <h3>Avg Delta</h3>
+                        <div class="amount" id="avgDelta">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Space 1 -->
+            <div class="ad-container">
+                <div class="ad-label">Advertisement</div>
+                <div class="ad-space" id="adSpace1">
+                    Ad Space
+                </div>
+            </div>
+
+            <!-- Shopping Lists -->
+            <div class="lists-section">
+                <button class="create-list-btn" onclick="createNewList()">+ Create Shopping List</button>
+                <h3>Shopping Lists (Last 90 Days)</h3>
+                <div id="shoppingLists"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping List View -->
+    <div id="shoppingView" class="container hidden">
+        <div class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="backToDashboard()">←</button>
+                <span style="font-size: 1.2em; font-weight: 600;">Shopping</span>
+            </div>
+            <div class="header-right">
+                <button class="theme-btn" onclick="showThemeModal()" title="Change Theme">🎨</button>
+            </div>
+        </div>
+
+        <div class="shopping-view">
+            <div class="shopping-header">
+                <div class="form-group">
+                    <label>Store Name</label>
+                    <input type="text" id="storeName" placeholder="e.g., Walmart, Kroger, Target">
+                </div>
+                <div class="form-group">
+                    <label>Budget</label>
+                    <input type="text" id="budgetAmount" placeholder="0.00" oninput="formatCurrency(this); updateTotal()">
+                </div>
+            </div>
+
+            <div class="budget-display">
+                <div>
+                    <div class="budget-label">Budget</div>
+                    <div class="budget-value" id="displayBudget">$0.00</div>
+                </div>
+                <div class="budget-amounts">
+                    <div class="budget-label">Total <span id="overBudgetIcon"></span></div>
+                    <div class="total-value" id="displayTotal">$0.00</div>
+                </div>
+            </div>
+
+            <div class="items-container" id="itemsContainer">
+                <!-- Items will be added here -->
+            </div>
+
+            <button class="add-item-btn" onclick="showAddItemModal()">+ Add Item</button>
+
+            <!-- Ad Space 2 -->
+            <div class="ad-container">
+                <div class="ad-label">Advertisement</div>
+                <div class="ad-space" id="adSpace2">
+                    Ad Space
+                </div>
+            </div>
+
+            <div class="action-buttons-shopping">
+                <button class="keep-list-btn" onclick="keepList()" id="keepListBtn">
+                    💾 Keep List for Later
+                </button>
+                <button class="done-shopping-btn" onclick="completeShopping()" id="doneBtn">
+                    ✓ Done Shopping!
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Add/Edit Item Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <h2 id="itemModalTitle">Add Item</h2>
+            <div class="form-group">
+                <label>Item Name</label>
+                <input type="text" id="itemName" placeholder="e.g., Milk, Bread, Apples">
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" id="itemQty" min="1" value="1" step="1">
+            </div>
+            <div class="form-group price-field">
+                <label>Price</label>
+                <div class="price-input-container">
+                    <input type="text" id="itemPrice" placeholder="0.00" oninput="formatCurrency(this)">
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal('itemModal')">Cancel</button>
+                <button class="modal-btn primary" onclick="saveItem()" id="saveItemBtn">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer Overlay -->
+    <div id="disclaimerOverlay" class="disclaimer-overlay" onclick="closeDisclaimer()"></div>
+
+    <!-- Disclaimer Drawer -->
+    <div id="disclaimerDrawer" class="disclaimer-drawer">
+        <button class="disclaimer-close" onclick="closeDisclaimer()">×</button>
+        <div class="disclaimer-content">
+            <h3>Disclaimer</h3>
+            <p>This application is provided for personal tracking purposes only. Shopping List is a budgeting tool designed to help you track shopping spending and stay within your budget.</p>
+            <p>Users are solely responsible for the accuracy of data entered and any financial decisions made. This app does not connect to bank accounts or store any sensitive financial information.</p>
+            <p>Logic Nerds and its affiliates assume no liability for any losses, damages, or consequences arising from the use or misuse of this application. This software is provided "as is" without warranty of any kind, express or implied.</p>
+            <p>By using this application, you acknowledge and accept full responsibility for your budgeting decisions and data accuracy.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2026 Logic Nerds. All Rights Reserved. | <a onclick="openDisclaimer()">Disclaimer</a>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut as firebaseSignOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, query, where, getDocs, onSnapshot, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDtBO48uBogqcdv69VO9IH7MIG8Kb1YG10",
+            authDomain: "idk-money-tracker.firebaseapp.com",
+            projectId: "idk-money-tracker",
+            storageBucket: "idk-money-tracker.firebasestorage.app",
+            messagingSenderId: "1033439716188",
+            appId: "1:1033439716188:web:ebf8c149f68d3d568f9799",
+            measurementId: "G-KEZSNJZ4JW"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Global variables
+        let currentUser = null;
+        let shoppingLists = [];
+        let currentList = null;
+        let currentListId = null;
+        let currentItems = [];
+        let editingItemId = null;
+        let unsubscribeLists = null;
+        let draggedElement = null;
+
+        // Make functions globally available
+        window.signInWithGoogle = signInWithGoogle;
+        window.signOut = signOut;
+        window.createNewList = createNewList;
+        window.viewList = viewList;
+        window.backToDashboard = backToDashboard;
+        window.deleteList = deleteList;
+        window.showAddItemModal = showAddItemModal;
+        window.saveItem = saveItem;
+        window.editItem = editItem;
+        window.deleteItem = deleteItem;
+        window.updateTotal = updateTotal;
+        window.keepList = keepList;
+        window.completeShopping = completeShopping;
+        window.formatCurrency = formatCurrency;
+        window.closeModal = closeModal;
+        window.openDisclaimer = openDisclaimer;
+        window.closeDisclaimer = closeDisclaimer;
+
+        // Auth state observer
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                showMainApp();
+                loadShoppingLists();
+            } else {
+                currentUser = null;
+                showLoginScreen();
+            }
+        });
+
+        // Sign in with Google
+        async function signInWithGoogle() {
+            const provider = new GoogleAuthProvider();
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error('Sign in error:', error);
+                alert('Sign in failed. Please try again.');
+            }
+        }
+
+        // Sign out
+        async function signOut() {
+            if (confirm('Are you sure you want to sign out?')) {
+                try {
+                    if (unsubscribeLists) unsubscribeLists();
+                    await firebaseSignOut(auth);
+                } catch (error) {
+                    console.error('Sign out error:', error);
+                    alert('Sign out failed. Please try again.');
+                }
+            }
+        }
+
+        // Show/hide screens
+        function showLoginScreen() {
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('shoppingView').classList.add('hidden');
+        }
+
+        function showMainApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('shoppingView').classList.add('hidden');
+            
+            if (currentUser.photoURL) {
+                document.getElementById('userAvatar').src = currentUser.photoURL;
+            }
+        }
+
+        function showShoppingView() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('shoppingView').classList.remove('hidden');
+        }
+
+        // Load shopping lists
+        function loadShoppingLists() {
+            const ninetyDaysAgo = new Date();
+            ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+            
+            const listsQuery = query(
+                collection(db, 'groceryLists'),
+                where('userId', '==', currentUser.uid)
+            );
+            
+            unsubscribeLists = onSnapshot(listsQuery, (snapshot) => {
+                shoppingLists = [];
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const listDate = data.createdAt?.toDate ? data.createdAt.toDate() : new Date(data.createdAt || Date.now());
+                    
+                    // Include completed lists from last 90 days or active lists
+                    if (!data.completed || listDate >= ninetyDaysAgo) {
+                        shoppingLists.push({ id: doc.id, ...data });
+                    }
+                });
+                updateDashboard();
+            });
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            updateSpendingOverview();
+            updateListsDisplay();
+        }
+
+        function updateSpendingOverview() {
+            const now = new Date();
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+            let lastTripSpend = 0;
+            let lastTripDelta = 0;
+            let mtdSpend = 0;
+            let mtdDelta = 0;
+            let totalSpend = 0;
+            let totalDelta = 0;
+            let completedCount = 0;
+
+            // Find most recent completed list for "Last Trip"
+            let mostRecentList = null;
+            let mostRecentDate = null;
+
+            shoppingLists.forEach(list => {
+                if (!list.completed) return;
+                if (!list.date) return; // Skip lists with pending timestamps
+                
+                const listDate = list.date?.toDate ? list.date.toDate() : new Date(list.date);
+                const spent = list.totalSpent || 0;
+                const delta = (list.budget || 0) - spent;
+
+                totalSpend += spent;
+                totalDelta += delta;
+                completedCount++;
+
+                // Track most recent list
+                if (!mostRecentDate || listDate > mostRecentDate) {
+                    mostRecentDate = listDate;
+                    mostRecentList = { spent, delta };
+                }
+
+                if (listDate >= startOfMonth) {
+                    mtdSpend += spent;
+                    mtdDelta += delta;
+                }
+            });
+
+            // Set Last Trip values from most recent list
+            if (mostRecentList) {
+                lastTripSpend = mostRecentList.spent;
+                lastTripDelta = mostRecentList.delta;
+            }
+
+            const avgSpend = completedCount > 0 ? totalSpend / completedCount : 0;
+            const avgDelta = completedCount > 0 ? totalDelta / completedCount : 0;
+
+            document.getElementById('lastTripSpend').textContent = '$' + lastTripSpend.toFixed(2);
+            document.getElementById('mtdSpend').textContent = '$' + mtdSpend.toFixed(2);
+            document.getElementById('avgSpend').textContent = '$' + avgSpend.toFixed(2);
+            
+            const lastTripEl = document.getElementById('lastTripDelta');
+            lastTripEl.textContent = '$' + Math.abs(lastTripDelta).toFixed(2);
+            lastTripEl.className = 'amount ' + (lastTripDelta >= 0 ? 'positive' : 'negative');
+            
+            const mtdEl = document.getElementById('mtdDelta');
+            mtdEl.textContent = '$' + Math.abs(mtdDelta).toFixed(2);
+            mtdEl.className = 'amount ' + (mtdDelta >= 0 ? 'positive' : 'negative');
+
+            const avgDeltaEl = document.getElementById('avgDelta');
+            avgDeltaEl.textContent = '$' + Math.abs(avgDelta).toFixed(2);
+            avgDeltaEl.className = 'amount ' + (avgDelta >= 0 ? 'positive' : 'negative');
+        }
+
+        function updateListsDisplay() {
+            const container = document.getElementById('shoppingLists');
+            
+            const activeLists = shoppingLists.filter(list => !list.completed);
+            const completedLists = shoppingLists
+                .filter(list => list.completed)
+                .sort((a, b) => {
+                    const aDate = a.date?.toDate ? a.date.toDate() : new Date(a.date);
+                    const bDate = b.date?.toDate ? b.date.toDate() : new Date(b.date);
+                    return bDate - aDate;
+                });
+
+            container.innerHTML = '';
+
+            // Show active lists first
+            if (activeLists.length > 0) {
+                const activeHeader = document.createElement('h4');
+                activeHeader.style.cssText = 'color: #666; font-size: 0.9em; margin-bottom: 10px; margin-top: 0;';
+                activeHeader.textContent = 'Active Lists';
+                container.appendChild(activeHeader);
+
+                activeLists.forEach(list => {
+                    const card = document.createElement('div');
+                    card.className = 'list-card';
+                    card.onclick = () => viewList(list.id);
+                    
+                    const listDate = list.createdAt?.toDate ? list.createdAt.toDate() : new Date(list.createdAt || Date.now());
+                    const dateStr = listDate.toLocaleDateString() + ' ' + listDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    const itemCount = list.items?.length || 0;
+                    const totalSpent = list.items?.reduce((sum, item) => sum + (item.qty * item.price), 0) || 0;
+                    
+                    card.innerHTML = `
+                        <div class="list-header">
+                            <div class="list-info">
+                                <h4>📝 ${list.storeName || 'Shopping List'}</h4>
+                                <div class="list-date">${dateStr}</div>
+                            </div>
+                            <button class="delete-list-btn" onclick="deleteList('${list.id}', event)">🗑️</button>
+                        </div>
+                        <div class="list-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Budget</div>
+                                <div class="stat-value">$${(list.budget || 0).toFixed(2)}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Items</div>
+                                <div class="stat-value">${itemCount}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Current</div>
+                                <div class="stat-value">$${totalSpent.toFixed(2)}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+
+                if (completedLists.length > 0) {
+                    const completedHeader = document.createElement('h4');
+                    completedHeader.style.cssText = 'color: #666; font-size: 0.9em; margin-bottom: 10px; margin-top: 20px;';
+                    completedHeader.textContent = 'Completed';
+                    container.appendChild(completedHeader);
+                }
+            }
+
+            // Show completed lists
+            if (completedLists.length === 0 && activeLists.length === 0) {
+                container.innerHTML = '<div class="no-lists">No shopping trips yet. Create your first list!</div>';
+                return;
+            }
+
+            completedLists.forEach(list => {
+                const card = document.createElement('div');
+                card.className = 'list-card';
+                
+                const listDate = list.date?.toDate ? list.date.toDate() : new Date(list.date);
+                const dateStr = listDate.toLocaleDateString() + ' ' + listDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const delta = (list.budget || 0) - (list.totalSpent || 0);
+                const overBudget = delta < 0;
+                
+                card.innerHTML = `
+                    <div class="list-header">
+                        <div class="list-info">
+                            <h4>💸 ${list.storeName || 'Shopping Trip'}</h4>
+                            <div class="list-date">${dateStr}</div>
+                        </div>
+                        <button class="delete-list-btn" onclick="deleteList('${list.id}', event)">🗑️</button>
+                    </div>
+                    <div class="list-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Budget</div>
+                            <div class="stat-value">$${(list.budget || 0).toFixed(2)}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Spent</div>
+                            <div class="stat-value">$${(list.totalSpent || 0).toFixed(2)}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">${overBudget ? 'Over' : 'Under'}</div>
+                            <div class="stat-value ${overBudget ? 'over-budget' : ''}">$${Math.abs(delta).toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Create new shopping list
+        async function createNewList() {
+            // Check if user has 10+ active lists
+            const activeLists = shoppingLists.filter(list => !list.completed);
+            if (activeLists.length >= 10) {
+                alert('You have reached the maximum of 10 active lists. Please complete or delete some lists before creating new ones.');
+                return;
+            }
+
+            currentListId = null;
+            currentItems = [];
+            document.getElementById('storeName').value = '';
+            document.getElementById('budgetAmount').value = '';
+            renderItems();
+            updateTotal();
+            showShoppingView();
+        }
+
+        // View existing list
+        function viewList(listId) {
+            const list = shoppingLists.find(l => l.id === listId);
+            if (!list) return;
+
+            currentListId = listId;
+            currentItems = list.items || [];
+            document.getElementById('storeName').value = list.storeName || '';
+            document.getElementById('budgetAmount').value = list.budget || '';
+            
+            renderItems();
+            updateTotal();
+            showShoppingView();
+        }
+
+        function backToDashboard() {
+            if (currentItems.length > 0 && !currentListId) {
+                if (!confirm('You have unsaved items. Are you sure you want to go back?')) {
+                    return;
+                }
+            }
+            currentListId = null;
+            currentItems = [];
+            showMainApp();
+        }
+
+        // Item modal functions
+        function showAddItemModal() {
+            editingItemId = null;
+            document.getElementById('itemModalTitle').textContent = 'Add Item';
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemQty').value = '1';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('saveItemBtn').textContent = 'Add';
+            document.getElementById('itemModal').classList.add('active');
+        }
+
+        function editItem(itemId) {
+            const item = currentItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            editingItemId = itemId;
+            document.getElementById('itemModalTitle').textContent = 'Edit Item';
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemQty').value = item.qty;
+            document.getElementById('itemPrice').value = item.price.toFixed(2);
+            document.getElementById('saveItemBtn').textContent = 'Save';
+            document.getElementById('itemModal').classList.add('active');
+        }
+
+        function saveItem() {
+            const name = document.getElementById('itemName').value.trim();
+            const qty = parseFloat(document.getElementById('itemQty').value) || 1;
+            const priceInput = document.getElementById('itemPrice').value;
+            const price = parseFloat(priceInput.replace(/[^\d.]/g, '')) || 0;
+
+            if (!name) {
+                alert('Please enter an item name!');
+                return;
+            }
+
+            if (editingItemId) {
+                // Update existing item
+                const itemIndex = currentItems.findIndex(i => i.id === editingItemId);
+                if (itemIndex !== -1) {
+                    currentItems[itemIndex] = {
+                        ...currentItems[itemIndex],
+                        name: name,
+                        qty: qty,
+                        price: price
+                    };
+                }
+            } else {
+                // Add new item
+                const newItem = {
+                    id: 'item_' + Date.now() + '_' + Math.random(),
+                    name: name,
+                    qty: qty,
+                    price: price,
+                    checked: false
+                };
+                currentItems.push(newItem);
+            }
+
+            renderItems();
+            updateTotal();
+            closeModal('itemModal');
+        }
+
+        function deleteItem(itemId, event) {
+            event.stopPropagation();
+            
+            if (confirm('Delete this item?')) {
+                currentItems = currentItems.filter(i => i.id !== itemId);
+                renderItems();
+                updateTotal();
+            }
+        }
+
+        function renderItems() {
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+
+            if (currentItems.length === 0) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'no-lists';
+                emptyMsg.textContent = 'No items yet. Add your first item!';
+                container.appendChild(emptyMsg);
+                return;
+            }
+
+            currentItems.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'shopping-item' + (item.checked ? ' checked' : '');
+                itemEl.draggable = true;
+                itemEl.dataset.itemId = item.id;
+                itemEl.onclick = () => editItem(item.id);
+
+                const total = item.qty * item.price;
+
+                itemEl.innerHTML = `
+                    <span class="drag-handle">☰</span>
+                    <input type="checkbox" class="item-checkbox" ${item.checked ? 'checked' : ''} onclick="event.stopPropagation(); toggleItemCheck('${item.id}')">
+                    <div class="item-details">
+                        <div class="item-name-text">${item.name}</div>
+                        <div class="item-info">Qty: ${item.qty} × $${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="item-total">$${total.toFixed(2)}</div>
+                    <button class="delete-item-btn" onclick="deleteItem('${item.id}', event)">×</button>
+                `;
+
+                setupDragAndDrop(itemEl);
+                container.appendChild(itemEl);
+            });
+        }
+
+        function toggleItemCheck(itemId) {
+            const item = currentItems.find(i => i.id === itemId);
+            if (item) {
+                item.checked = !item.checked;
+                renderItems();
+            }
+        }
+
+        function setupDragAndDrop(item) {
+            item.addEventListener('dragstart', (e) => {
+                draggedElement = item;
+                item.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.stopPropagation();
+            });
+
+            item.addEventListener('dragend', () => {
+                item.classList.remove('dragging');
+                
+                // Update the order in currentItems array based on DOM order
+                const container = document.getElementById('itemsContainer');
+                const itemElements = Array.from(container.querySelectorAll('.shopping-item'));
+                const newOrder = itemElements.map(el => el.dataset.itemId);
+                
+                currentItems.sort((a, b) => {
+                    return newOrder.indexOf(a.id) - newOrder.indexOf(b.id);
+                });
+                
+                draggedElement = null;
+            });
+
+            item.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const container = document.getElementById('itemsContainer');
+                const afterElement = getDragAfterElement(container, e.clientY);
+                
+                if (afterElement == null) {
+                    container.appendChild(draggedElement);
+                } else {
+                    container.insertBefore(draggedElement, afterElement);
+                }
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.shopping-item:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function updateTotal() {
+            let total = 0;
+            
+            currentItems.forEach(item => {
+                total += item.qty * item.price;
+            });
+
+            const budgetInput = document.getElementById('budgetAmount').value;
+            const budget = parseFloat(budgetInput.replace(/[^\d.]/g, '')) || 0;
+            
+            document.getElementById('displayBudget').textContent = '$' + budget.toFixed(2);
+            document.getElementById('displayTotal').textContent = '$' + total.toFixed(2);
+            
+            const overBudgetIcon = document.getElementById('overBudgetIcon');
+            if (total > budget && budget > 0) {
+                overBudgetIcon.textContent = '⚠️';
+            } else {
+                overBudgetIcon.textContent = '';
+            }
+
+            const storeName = document.getElementById('storeName').value.trim();
+            const hasItems = currentItems.length > 0;
+            
+            document.getElementById('keepListBtn').disabled = !storeName || !hasItems;
+            document.getElementById('doneBtn').disabled = !storeName || !hasItems;
+        }
+
+        // Keep list for later
+        async function keepList() {
+            const storeName = document.getElementById('storeName').value.trim();
+            const budgetInput = document.getElementById('budgetAmount').value;
+            const budget = parseFloat(budgetInput.replace(/[^\d.]/g, '')) || 0;
+            
+            if (!storeName) {
+                alert('Please enter a store name!');
+                return;
+            }
+
+            if (currentItems.length === 0) {
+                alert('Please add at least one item!');
+                return;
+            }
+
+            try {
+                const listData = {
+                    userId: currentUser.uid,
+                    storeName: storeName,
+                    budget: budget,
+                    items: currentItems.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        qty: item.qty,
+                        price: item.price,
+                        checked: item.checked
+                    })),
+                    completed: false,
+                    createdAt: serverTimestamp()
+                };
+
+                if (currentListId) {
+                    // Update existing list
+                    await updateDoc(doc(db, 'groceryLists', currentListId), listData);
+                    alert('List updated! 📝');
+                } else {
+                    // Create new list
+                    await addDoc(collection(db, 'groceryLists'), listData);
+                    alert('List saved! 📝');
+                }
+
+                showMainApp();
+            } catch (error) {
+                console.error('Error saving list:', error);
+                alert('Failed to save list. Please try again.');
+            }
+        }
+
+        // Complete shopping
+        async function completeShopping() {
+            const storeName = document.getElementById('storeName').value.trim();
+            const budgetInput = document.getElementById('budgetAmount').value;
+            const budget = parseFloat(budgetInput.replace(/[^\d.]/g, '')) || 0;
+            
+            if (!storeName) {
+                alert('Please enter a store name!');
+                return;
+            }
+
+            if (currentItems.length === 0) {
+                alert('Please add at least one item!');
+                return;
+            }
+
+            let totalSpent = 0;
+            currentItems.forEach(item => {
+                totalSpent += item.qty * item.price;
+            });
+
+            const delta = budget - totalSpent;
+
+            try {
+                const listData = {
+                    userId: currentUser.uid,
+                    storeName: storeName,
+                    budget: budget,
+                    totalSpent: totalSpent,
+                    delta: delta,
+                    items: currentItems.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        qty: item.qty,
+                        price: item.price,
+                        checked: item.checked
+                    })),
+                    completed: true,
+                    date: serverTimestamp(),
+                    createdAt: serverTimestamp()
+                };
+
+                if (currentListId) {
+                    // Complete existing list
+                    await updateDoc(doc(db, 'groceryLists', currentListId), listData);
+                } else {
+                    // Create and complete new list
+                    await addDoc(collection(db, 'groceryLists'), listData);
+                }
+
+                alert('Shopping trip completed! 🎉');
+                showMainApp();
+            } catch (error) {
+                console.error('Error completing shopping:', error);
+                alert('Failed to complete shopping. Please try again.');
+            }
+        }
+
+        function formatCurrency(input) {
+            let value = input.value.replace(/[^\d.]/g, '');
+            
+            const parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+            
+            if (parts[1] && parts[1].length > 2) {
+                value = parts[0] + '.' + parts[1].substring(0, 2);
+            }
+            
+            input.value = value;
+        }
+
+        window.toggleItemCheck = toggleItemCheck;
+
+        // Delete list
+        async function deleteList(listId, event) {
+            event.stopPropagation();
+            
+            if (confirm('Delete this shopping list?')) {
+                try {
+                    await deleteDoc(doc(db, 'groceryLists', listId));
+                } catch (error) {
+                    console.error('Error deleting list:', error);
+                    alert('Failed to delete. Please try again.');
+                }
+            }
+        }
+
+        // Utility functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function openDisclaimer() {
+            document.getElementById('disclaimerDrawer').classList.add('open');
+            document.getElementById('disclaimerOverlay').classList.add('active');
+        }
+
+        function closeDisclaimer() {
+            document.getElementById('disclaimerDrawer').classList.remove('open');
+            document.getElementById('disclaimerOverlay').classList.remove('active');
+        }
+
+        // Theme management
+    </script>
+</body>
+</html>
