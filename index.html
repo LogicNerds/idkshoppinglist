@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDK My Shopping List</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --slate: #475569;
+            --slate-dark: #334155;
+            --slate-light: #64748B;
+            --teal: #14B8A6;
+            --teal-dark: #0D9488;
+            --teal-deeper: #0F766E;
+            --bg: #F8FAFC;
+            --white: #FFFFFF;
+            --text: #0F172A;
+            --text-mid: #475569;
+            --text-light: #94A3B8;
+            --border: #E2E8F0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px 80px;
+            position: relative;
+            overflow: hidden;
+            background: var(--slate-dark);
+        }
+
+        /* Subtle teal glow behind content */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(20,184,166,0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Dot grid texture */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 480px;
+            width: 100%;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(20,184,166,0.15);
+            border: 1px solid rgba(20,184,166,0.35);
+            color: var(--teal);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78em;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 100px;
+            margin-bottom: 28px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .hero-title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: clamp(2.6em, 8vw, 3.6em);
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.05;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            animation: fadeUp 0.6s 0.1s ease both;
+        }
+
+        .hero-title span {
+            color: var(--teal);
+        }
+
+        .hero-tagline {
+            font-family: 'DM Sans', sans-serif;
+            font-style: italic;
+            font-size: 1.05em;
+            color: rgba(255,255,255,0.5);
+            font-weight: 300;
+            margin-bottom: 28px;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        .hero-desc {
+            font-size: 1.05em;
+            color: rgba(255,255,255,0.72);
+            line-height: 1.65;
+            font-weight: 300;
+            margin-bottom: 44px;
+            animation: fadeUp 0.6s 0.3s ease both;
+        }
+
+        .launch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-deeper) 100%);
+            color: white;
+            text-decoration: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            padding: 18px 40px;
+            border-radius: 14px;
+            letter-spacing: 0.3px;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 30px rgba(20,184,166,0.35);
+            animation: fadeUp 0.6s 0.4s ease both;
+        }
+
+        .launch-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 40px rgba(20,184,166,0.45);
+        }
+
+        .launch-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .launch-arrow {
+            font-size: 1.1em;
+            transition: transform 0.2s;
+        }
+
+        .launch-btn:hover .launch-arrow {
+            transform: translateX(4px);
+        }
+
+        /* ── FEATURES ── */
+        .features {
+            padding: 72px 24px 80px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .features-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.75em;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--teal-dark);
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .features-heading {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1.9em;
+            font-weight: 700;
+            color: var(--text);
+            text-align: center;
+            line-height: 1.2;
+            margin-bottom: 48px;
+            letter-spacing: -0.5px;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 18px;
+            padding: 26px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--teal) 0%, var(--teal-deeper) 100%);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 6px 24px rgba(13, 148, 136, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 1.8em;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .feature-text h3 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1.05em;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+            letter-spacing: -0.2px;
+        }
+
+        .feature-text p {
+            font-size: 0.9em;
+            color: var(--text-mid);
+            line-height: 1.55;
+            font-weight: 300;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            padding: 28px 24px;
+            text-align: center;
+            font-size: 0.82em;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.4em;
+            }
+
+            .launch-btn {
+                padding: 16px 32px;
+            }
+
+            .features {
+                padding: 56px 20px 64px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-inner">
+            <h1 class="hero-title">💸IDK<br><span>My Shopping List</span></h1>
+            <p class="hero-tagline">If you knew better, you'd do better.</p>
+            <p class="hero-desc">Build your list, set a budget, and track what you actually spend — all in one place. No clutter, no nonsense.</p>
+            <a href="index.html" class="launch-btn">
+                Go Shopping <span class="launch-arrow">→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <p class="features-label">What it does</p>
+        <h2 class="features-heading">Shop smarter,<br>not harder.</h2>
+
+        <div class="feature-list">
+            <div class="feature-card">
+                <div class="feature-icon">🛒</div>
+                <div class="feature-text">
+                    <h3>Build Your List</h3>
+                    <p>Add items with quantities and prices before you leave the house. Reorder on the fly with drag and drop.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <div class="feature-text">
+                    <h3>Stay on Budget</h3>
+                    <p>Set a budget and watch your running total in real time. Get warned the moment you go over.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-text">
+                    <h3>Track Your Spending</h3>
+                    <p>See your last trip, month-to-date totals, and average spend at a glance. Know your habits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2026 Logic Nerds. All Rights Reserved.
+    </footer>
+
+</body>
+</html>
